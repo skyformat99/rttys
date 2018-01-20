@@ -14,7 +14,7 @@
                 </FormItem>
             </Form>
         </Card>
-        <div ref="terminal" class="terminal-container" :style="{display: termOn ? 'block' : 'none'}"></div>
+        <div ref="terminal" class="terminal-container" :style="{display: termOn ? 'block' : 'none'}" @mouseup.right="handleMouseup"></div>
         <Spin size="large" fix v-if="loading"></Spin>
     </div>
 </template>
@@ -26,6 +26,8 @@ import { Terminal } from 'xterm'
 import 'xterm/lib/xterm.css'
 import * as fit from 'xterm/lib/addons/fit/fit';
 import { Base64 } from 'js-base64';
+
+import RightMenu from './components/RightMenu'
 
 export default {
     data() {
@@ -81,7 +83,7 @@ export default {
             if (location.protocol == 'https://')
                 protocol = 'wss://';
 
-            var ws = new Socket(protocol + location.host + '/ws/browser?did=' + this.form.id);
+            var ws = new Socket(protocol + '192.168.3.33:5912' + '/ws/browser?did=' + this.form.id);
             ws.on('connect', ()=> {
                 ws.on('data', (data)=>{
                     var resp = JSON.parse(data);
@@ -134,6 +136,13 @@ export default {
                     this.loading = true;
                     this.termOn = true;
                     window.setTimeout(this.login, 200);
+                }
+            });
+        },
+        handleMouseup() {
+            this.$Modal.info({
+                render: (h) => {
+                     return h('RightMenu');
                 }
             });
         }

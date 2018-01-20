@@ -9,8 +9,12 @@ Vue.config.productionTip = false
 
 Vue.use(iView);
 
+window.document.oncontextmenu = function (e) {
+	return false;
+};
+
 /* eslint-disable no-new */
 new Vue({
     el: '#app',
     render: (h)=>h(App)
-})
+});
